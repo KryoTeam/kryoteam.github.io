@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KryoClient</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@200..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#000000;
+--text:#ffffff;
+--muted:#9a9a9a;
+--purple1:#7b3cff;
+--purple2:#b700ff;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+overflow-x:hidden;
+}
+
+/* STAR BACKGROUND */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+/* NAVBAR */
+
+nav{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 8%;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+transform:translateY(-100%);
+transition:.35s;
+z-index:1000;
+}
+
+nav.show{
+transform:translateY(0);
+}
+
+.logo-text{
+font-family:prompt;
+font-size:20px;
+}
+
+.nav-links{
+display:flex;
+gap:30px;
+align-items:center;
+}
+
+.nav-links a{
+text-decoration:none;
+color:white;
+font-size:14px;
+opacity:.85;
+}
+
+.download-nav{
+padding:10px 22px;
+border-radius:25px;
+background:linear-gradient(270deg,var(--purple1),var(--purple2),var(--purple1));
+background-size:200% 200%;
+animation:gradientMove 5s infinite linear;
+}
+
+/* HERO */
+
+.hero{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+}
+
+.hero-content{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:20px;
+max-width:700px;
+}
+
+/* LOGO */
+
+.hero-logo{
+width:75px;
+height:75px;
+object-fit:contain;
+}
+
+/* TITLE */
+
+.hero-title{
+font-family:"Chiron GoRound TC";
+font-size:clamp(40px,6vw,72px);
+letter-spacing:6px;
+font-weight: 0;
+}
+
+/* DESCRIPTION */
+
+.hero-desc{
+color:var(--muted);
+font-size:16px;
+line-height:1.6;
+max-width:600px;
+}
+
+/* DOWNLOAD BUTTON */
+
+.download-btn{
+margin-top:10px;
+padding:16px 40px;
+border-radius:40px;
+font-size:16px;
+font-weight:600;
+text-decoration:none;
+color:white;
+
+background:linear-gradient(270deg,#7b3cff,#b700ff,#7b3cff);
+background-size:200% 200%;
+animation:gradientMove 4s linear infinite;
+
+transition:transform .2s;
+}
+
+.download-btn:hover{
+transform:translateY(-3px);
+}
+
+/* GRADIENT ANIMATION */
+
+@keyframes gradientMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* CONTENT SECTIONS */
+
+.section{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:120px 10%;
+}
+
+.section h2{
+font-family:prompt;
+font-size:36px;
+margin-bottom:20px;
+}
+
+.section p{
+max-width:650px;
+color:var(--muted);
+line-height:1.7;
+}
+
+.grid{
+margin-top:50px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+width:100%;
+max-width:1000px;
+}
+
+.card{
+background:rgba(255,255,255,.04);
+border-radius:14px;
+padding:30px;
+border:1px solid rgba(255,255,255,.06);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+border-color:rgba(168,85,247,.5);
+}
+
+footer{
+padding:40px;
+text-align:center;
+color:var(--muted);
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<nav id="navbar">
+<div class="logo-text">KryoClient</div>
+
+<div class="nav-links">
+<a href="#">Blog</a>
+<a href="#">Changelog</a>
+<a class="download-nav" href="#">Download</a>
+</div>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-content">
+
+<img src="logo.png" class="hero-logo" alt="KryoClient Logo">
+
+<h1 class="hero-title">KryoClient</h1>
+
+<p class="hero-desc">
+Experience Minecraft like never before with KryoClient — an open-source Python powered Minecraft client designed for better performance, modern tools, and customization.
+</p>
+
+<a class="download-btn" href="#">Download for Windows</a>
+
+</div>
+
+</section>
+
+<!-- FEATURES -->
+
+<section class="section">
+
+<h2>Features</h2>
+
+<p>Powerful tools and modern improvements designed to enhance your Minecraft experience.</p>
+
+<div class="grid">
+
+<div class="card">
+<h3>Advanced Tools</h3>
+<p>Utilities that expand gameplay possibilities.</p>
+</div>
+
+<div class="card">
+<h3>Better Performance</h3>
+<p>Optimized rendering and improved FPS.</p>
+</div>
+
+<div class="card">
+<h3>Customization</h3>
+<p>Configure the client exactly how you want.</p>
+</div>
+
+</div>
+
+</section>
+
+<footer>
+© 2026 KryoClient
+</footer>
+
+<script>
+
+/* NAVBAR SCROLL */
+
+const navbar=document.getElementById("navbar");
+
+window.addEventListener("scroll",()=>{
+if(window.scrollY>80){
+navbar.classList.add("show");
+}else{
+navbar.classList.remove("show");
+}
+});
+
+
+/* STAR BACKGROUND */
+
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+
+let stars=[];
+let numStars=120;
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+
+window.addEventListener("resize",resize);
+resize();
+
+for(let i=0;i<numStars;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+size:Math.random()*2,
+speed:Math.random()*0.4
+});
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="white";
+
+stars.forEach(star=>{
+
+star.y+=star.speed;
+
+if(star.y>canvas.height){
+star.y=0;
+star.x=Math.random()*canvas.width;
+}
+
+ctx.beginPath();
+ctx.arc(star.x,star.y,star.size,0,Math.PI*2);
+ctx.fill();
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
